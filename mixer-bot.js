@@ -1,5 +1,7 @@
 module.exports = {
-    bot: function(message_received_callback) {
+    bot: function () {
+        this.message_received_callback = function(){}
+        this.send_message = function () {}
         // Load in some dependencies
         const Mixer = require('@mixer/client-node');
         const ws = require('ws');
@@ -29,7 +31,7 @@ module.exports = {
             // Users Current will return information about the user who owns the OAuth
             // token registered above.
             return client.request('GET', 'users/current')
-            .then(response => response.body);
+                .then(response => response.body);
         }
         //getUserInfo().then(userInfo => {
         //    console.log(`Hi, ${userInfo.username}!`);
@@ -76,33 +78,40 @@ module.exports = {
             const socket = await joinChat(userInfo.id, userInfo.channel.id);
 
             //Send a message once connected to chat.
-            socket.call('msg', [`Hi! I'm connected!`]);
+            socket.call('msg', [`Bot started!`]);
             // Add more socket stuff here:
 
             // Greet a joined user
             socket.on('UserJoin', data => {
-                socket.call('msg', [`Hi ${data.username}! I'm pingbot! Write !ping and I will pong back!`]);
+                //socket.call('msg', [`Hi ${data.username}! I'm pingbot! Write !ping and I will pong back!`]);
+                invoke_callback(message_received_callback, `${data.username} joined chat`);
             });
 
             // React to our !ping command
             // When there's a new chat message.
             socket.on('ChatMessage', data => {
                 // Does the message start with !ping
-                if (data.message.message[0].data.toLowerCase().startsWith('!ping')) {
-                    // Respond with pong
-                    socket.call('msg', [`@${data.user_name} PONG!`]);
-                    console.log(`Ponged ${data.user_name}`);
-                    return;
-                }
+                //if (data.message.message[0].data.toLowerCase().startsWith('!ping')) {
+                //    // Respond with pong
+                //    socket.call('msg', [`@${data.user_name} PONG!`]);
+                //    console.log(`Ponged ${data.user_name}`);
+                //    return;
+                //}
+                //if (data.user_name == userInfo.username)
+                //    return;
 
-                if (message_received_callback)
-                    message_received_callback(data.message.message[0].data);
+                invoke_callback(this.message_received_callback, `${data.user_name}: ${data.message.message.map(m => m.text).join('')}`);
             });
+
+            this.send_message = function (message) {
+                socket.call('msg', [message]);
+                console.log('Mixer - Message sent!');
+            }
         });
 
-        this.send_message = function(message) {
-            socket.call('msg', [message]);
-            console.log('Mixer - Message sent!');
+        function invoke_callback(message_received_callback, message) {
+            if (message_received_callback)
+                message_received_callback(message);
         }
 
         return this;
