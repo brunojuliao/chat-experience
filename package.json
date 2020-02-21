@@ -3,5 +3,8 @@
     "@mixer/client-node": "^3.5.0",
     "node-telegram-bot-api": "^0.40.0",
     "ws": "^7.2.1"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }
