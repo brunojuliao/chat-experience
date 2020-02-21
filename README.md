@@ -35,14 +35,21 @@ If you have no idea, no problem. Most likely you are a Windows User, so I will d
 - Open cmd.exe
   - Run: setx mixer_token [telegram token]
   - Run: setx telegram_token [telegram token]
+  - Run: setx telegram_username [telegram username]
 
 - Optional steps still in cmd.exe
   - Run: set mixer_token [mixer token]
   - Run: set telegram_token [telegram token]
+  - Run: set telegram_username [telegram username]
 
 __Why the set commands seems duplicated?__
 
-_The "set" command will set the env var for the current session only. The "setx" command will set the env var system wide. You can run only setx though. The "set" suggestions is in the case of you using that same session to run the program_
+_The "set" command will set the env var for the current session only. The "setx" command will set the env var system wide. You can run only setx though. The "set" suggestions is in the case of you using that same session to run the program._
 
 __Cool. Although, I'm not a programmer. How can I run it?__
-_In this case you can download a compiled version [here](http://tiny.cc/d24bkz) (right-click and ask to open in new tab). You can't scape the cmd.exe steps though. Those are important_
+
+_In this case you can download a compiled version [here](http://tiny.cc/d24bkz) (right-click and ask to open in new tab). You can't scape the cmd.exe steps though. Those are important._
+
+__Will anyone in Telegram be able to use "my bot"? I mean, read my channel's chat history and also send messages?__
+
+_No. It was built to answer commands only from the configured "telegram_username". Everyone else will be able to find your bot and send messages to it, but they will get as reply "Private bot"._
