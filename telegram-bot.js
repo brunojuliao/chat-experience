@@ -1,6 +1,7 @@
 module.exports = {
   bot: function () {
     this.message_received_callback = function(){};
+    const allowed_username = process.env.telegram_username.toLowerCase();
     const TelegramBot = require('node-telegram-bot-api');
 
     // replace the value below with the Telegram token you receive from @BotFather
@@ -23,9 +24,8 @@ module.exports = {
     //});
 
     let chatId;
-    const allowed_username = "brunojuliao";
     client.onText(/\/start$/, (msg, match) => {
-      if (msg.chat.username != allowed_username) {
+      if (msg.chat.username.toLowerCase() != allowed_username) {
         client.sendMessage(msg.chat.id, "Private bot.");
         return;
       }
