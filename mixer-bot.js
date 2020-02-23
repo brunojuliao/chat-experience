@@ -84,7 +84,7 @@ module.exports = {
             // Greet a joined user
             socket.on('UserJoin', data => {
                 //socket.call('msg', [`Hi ${data.username}! I'm pingbot! Write !ping and I will pong back!`]);
-                invoke_callback(this.message_received_callback, `${data.username} joined chat`);
+                invoke_callback(this.message_received_callback, `Mixer > Join: ${data.username}`);
             });
 
             // React to our !ping command
@@ -100,12 +100,12 @@ module.exports = {
                 if (data.user_name == userInfo.username)
                     return;
 
-                invoke_callback(this.message_received_callback, `${data.user_name}: ${data.message.message.map(m => m.text).join('')}`);
+                invoke_callback(this.message_received_callback, `Mixer > ${data.user_name}: ${data.message.message.map(m => m.text).join('')}`);
             });
 
             this.send_message = function (message) {
                 socket.call('msg', [message]);
-                console.log('Mixer - Message sent!');
+                console.log('Mixer > Message sent!');
             }
         });
 

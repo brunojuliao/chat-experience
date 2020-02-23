@@ -68,7 +68,7 @@ module.exports = {
       if (chatId === undefined)
         return;
       client.sendMessage(chatId, message);
-      console.log('Telegram - Message sent!');
+      console.log('Telegram > Message sent!');
     }
 
     return this;
