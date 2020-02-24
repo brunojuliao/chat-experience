@@ -11,7 +11,7 @@ Real life conversaton:
 
 That's it. That's why this project started.
 
-In its current version, it supports only Mixer and Telegram. Only because that was his main request though. I plan to add Twitch in the loop. Stay tuned :)
+In its current version, it supports only Mixer and Telegram. Only because that was his main request though. ~~I plan to add Twitch in the loop~~ (done). Stay tuned :)
 
 # Requirements
 - A Telegram token - Steps (Mandatory):
