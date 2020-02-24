@@ -7,9 +7,9 @@ module.exports = {
         const TwitchBot = require('twitch-bot')
         
         const Bot = new TwitchBot({
-        username: process.env.twitch_bot_username,
-        oauth: process.env.twitch_token,
-        channels: [process.env.twitch_channel]
+			username: process.env.twitch_bot_username,
+			oauth: process.env.twitch_token,
+			channels: [process.env.twitch_channel]
         })
         
         Bot.on('join', channel => {
@@ -25,7 +25,7 @@ module.exports = {
         })
 
         this.send_message = function (message) {
-            Bot.say(message, this.twitch_channel);
+			Bot.say(message, this.twitch_channel);
             console.log('Twitch > Message sent!');
         }
 

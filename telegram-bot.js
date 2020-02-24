@@ -1,10 +1,11 @@
 module.exports = {
   bot: function () {
     this.message_received_callback = function(){};
-    const allowed_username = process.env.telegram_username.toLowerCase();
+    const allowed_username = process.env.telegram_username;
     const TelegramBot = require('node-telegram-bot-api');
 
     // replace the value below with the Telegram token you receive from @BotFather
+	// or better yet, use the environment variables and or the chex.bat script
     const token = process.env.telegram_token;
 
     // Create a bot that uses 'polling' to fetch new updates
@@ -25,28 +26,30 @@ module.exports = {
 
     let chatId;
     client.onText(/\/start$/, (msg, match) => {
-      if (msg.chat.username.toLowerCase() != allowed_username) {
-        client.sendMessage(msg.chat.id, "Private bot.");
+      if (msg.chat.username != allowed_username) {
+        client.sendMessage(msg.chat.id, "START: Not an allowed user.");
         return;
       }
       chatId = msg.chat.id;
       console.log(`Chat ID ${chatId} recorded. Starting to listen`);
+	  client.sendMessage(msg.chat.id, "START: Started listening.");
     });
 
     client.onText(/\/stop$/, (msg, match) => {
       if (msg.chat.username != allowed_username) {
-        client.sendMessage(msg.chat.id, "Private bot.");
+        client.sendMessage(msg.chat.id, "STOP: Not an allowed user.");
         return;
       }
       chatId = undefined;
       console.log(`Stop listenning`);
+	  client.sendMessage(msg.chat.id, "STOP: Stopped listening.");
     });
 
     // Listen for any kind of message. There are different kinds of
     // messages.
     client.on('message', (msg) => {
       if (msg.chat.username != allowed_username) {
-        client.sendMessage(msg.chat.id, "Private bot.");
+        client.sendMessage(msg.chat.id, "I don't know you, please go away.");
         return;
       }
       if (chatId === undefined || msg.text == '/stop')

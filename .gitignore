@@ -1,5 +1,7 @@
 .vscode
 
+tbot.bat
+
 # Logs
 logs
 *.log
