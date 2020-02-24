@@ -23,7 +23,9 @@ const twitch_message_received = function(message) {
 }
 
 telegram_bot.message_received_callback = telegram_message_received;
-mixer_bot?.message_received_callback = mixer_message_received;
-twitch_bot?.message_received_callback = twitch_message_received;
+if (mixer_bot)
+    mixer_bot.message_received_callback = mixer_message_received;
+if (twitch_bot)
+    twitch_bot.message_received_callback = twitch_message_received;
 
 console.log("Telegram > ", telegram_bot, "Mixer > ", mixer_bot, "Twitch > ", twitch_bot);
