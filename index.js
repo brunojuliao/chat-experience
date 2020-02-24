@@ -1,10 +1,10 @@
-const mixer = require("./mixer-bot.js");
 const telegram = require("./telegram-bot.js");
+const mixer = require("./mixer-bot.js");
 const twitch = require("./twitch-bot.js");
 
-let mixer_bot = mixer.bot();
 let telegram_bot = telegram.bot();
-let twitch_bot = twitch.bot();
+let mixer_bot = process.env.mixer_token ? mixer.bot() : null;
+let twitch_bot = process.env.twitch_token ? twitch.bot() : null;
 
 const telegram_message_received = function(message) {
     console.log('Telegram > Message received!');
@@ -22,7 +22,8 @@ const twitch_message_received = function(message) {
     telegram_bot.send_message(message);
 }
 
-mixer_bot.message_received_callback = mixer_message_received;
 telegram_bot.message_received_callback = telegram_message_received;
-twitch_bot.message_received_callback = twitch_message_received;
-console.log(mixer_bot, telegram_bot, twitch_bot);
+mixer_bot?.message_received_callback = mixer_message_received;
+twitch_bot?.message_received_callback = twitch_message_received;
+
+console.log("Telegram > ", telegram_bot, "Mixer > ", mixer_bot, "Twitch > ", twitch_bot);
