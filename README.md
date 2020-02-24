@@ -36,7 +36,7 @@ In its current version, it supports only Mixer and Telegram. Only because that w
     - Click create :)
     - Copy your "Client ID" to somewhere safe
     - Now, in order to create the OAuth token, we need:
-      - Grabe this URL and replace the <your client ID> with your Client ID (I've already replaced the URL to localhost, type to token and scope to chat:edit chat:read so we can read and send messages): https://id.twitch.tv/oauth2/authorize?client_id=<your client ID>&redirect_uri=http%3A%2F%2Flocalhost&response_type=token&scope=chat%3Aedit%20chat%3Aread
+      - Grabe this URL and replace the <your client ID> with your Client ID (I've already replaced the URL to localhost, type to token and scope to chat:edit chat:read so we can read and send messages): `https://id.twitch.tv/oauth2/authorize?client_id=<your client ID>&redirect_uri=http%3A%2F%2Flocalhost&response_type=token&scope=chat%3Aedit%20chat%3Aread`
       - Paste the replaced URL into your browser. This will start the authorization workflow. It will end by redirecting you to localhost. As you have no application listening, you will see a browser error page. Grab the #access_token content (#access_token=[content]&scope=)
       - Now, to form the token, just prepend "oauth:" to the content retrieved previously. That is your Twitch Token ;)
       - Reference: https://dev.twitch.tv/docs/authentication/getting-tokens-oauth
