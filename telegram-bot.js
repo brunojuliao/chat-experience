@@ -1,6 +1,9 @@
 module.exports = {
-  bot: function () {
-    this.message_received_callback = function(){};
+  name: 'Telegram',
+  is_configured: process.env.telegram_token && process.env.telegram_username ? true : false,
+  is_hub: true,
+  instance: null,
+  bot: function (message_received_callback, services) {
     const allowed_username = process.env.telegram_username;
     const TelegramBot = require('node-telegram-bot-api');
 
@@ -32,7 +35,7 @@ module.exports = {
       }
       chatId = msg.chat.id;
       console.log(`Chat ID ${chatId} recorded. Starting to listen`);
-	  client.sendMessage(msg.chat.id, "START: Started listening.");
+	    client.sendMessage(msg.chat.id, "START: Started listening.");
     });
 
     client.onText(/\/stop$/, (msg, match) => {
@@ -42,7 +45,7 @@ module.exports = {
       }
       chatId = undefined;
       console.log(`Stop listenning`);
-	  client.sendMessage(msg.chat.id, "STOP: Stopped listening.");
+	    client.sendMessage(msg.chat.id, "STOP: Stopped listening.");
     });
 
     // Listen for any kind of message. There are different kinds of
@@ -59,19 +62,33 @@ module.exports = {
       // send a message to the chat acknowledging receipt of their message
       //client.sendMessage(chatId, 'Received your message');
 
-      invoke_callback(this.message_received_callback, msg.text)
+      const data = extract_service(msg);
+
+      invoke_callback(this, message_received_callback, msg.text, services, data);
     });
 
-    function invoke_callback(message_received_callback, message) {
-      if (message_received_callback)
-        message_received_callback(message);
+    const service_regex = new RegExp(/^(\w+) >( (\w+):)?/);
+    const extract_service = (msg) => {
+      const replied_message = msg.reply_to_message 
+        ? msg.reply_to_message.text 
+        : null;
+      const regex_result = service_regex.exec(replied_message);
+      return {
+        service_name:(regex_result || [])[1],
+        reply_to:(regex_result || [])[3]
+      };
     }
 
-    this.send_message = function (message) {
+    const invoke_callback = (service, message_received_callback, message, services, data) => {
+      if (message_received_callback)
+        message_received_callback(service, message, services, data);
+    }
+
+    this.send_message = (message) => {
       if (chatId === undefined)
         return;
       client.sendMessage(chatId, message);
-      console.log('Telegram > Message sent!');
+      console.log(`${this.name} > Message sent!`);
     }
 
     return this;

@@ -1,6 +1,9 @@
 module.exports = {
-    bot: function () {
-        this.message_received_callback = function(){}
+    name: 'Mixer',
+    is_configured: process.env.mixer_token ? true : false,
+    is_hub: false,
+    instance: null,
+    bot: function (message_received_callback, services) {
         this.send_message = function () {}
         // Load in some dependencies
         const Mixer = require('@mixer/client-node');
@@ -84,7 +87,7 @@ module.exports = {
             // Greet a joined user
             socket.on('UserJoin', data => {
                 //socket.call('msg', [`Hi ${data.username}! I'm pingbot! Write !ping and I will pong back!`]);
-                invoke_callback(this.message_received_callback, `Mixer > Join: ${data.username}`);
+                invoke_callback(this, message_received_callback, `${this.name} > Join: ${data.username}`, services);
             });
 
             // React to our !ping command
@@ -100,18 +103,18 @@ module.exports = {
                 if (data.user_name == userInfo.username)
                     return;
 
-                invoke_callback(this.message_received_callback, `Mixer > ${data.user_name}: ${data.message.message.map(m => m.text).join('')}`);
+                invoke_callback(this, message_received_callback, `${this.name} > ${data.user_name}: ${data.message.message.map(m => m.text).join('')}`, services);
             });
 
             this.send_message = function (message) {
                 socket.call('msg', [message]);
-                console.log('Mixer > Message sent!');
+                console.log(`${this.name} > Message sent!`);
             }
         });
 
-        function invoke_callback(message_received_callback, message) {
+        const invoke_callback = (service, message_received_callback, message, services) => {
             if (message_received_callback)
-                message_received_callback(message);
+                message_received_callback(service, message, services);
         }
 
         return this;
