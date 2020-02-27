@@ -100,8 +100,9 @@ module.exports = {
                 //    console.log(`Ponged ${data.user_name}`);
                 //    return;
                 //}
-                if (data.user_name == userInfo.username)
-                    return;
+                // The code below was commented after talking to Tango, who pointed this was mising on Twitch and that Twitch's behavior was better for testing :)
+                //if (data.user_name == userInfo.username)
+                //    return;
 
                 invoke_callback(this, message_received_callback, `${this.name} > ${data.user_name}: ${data.message.message.map(m => m.text).join('')}`, services);
             });
