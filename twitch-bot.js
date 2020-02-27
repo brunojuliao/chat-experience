@@ -17,6 +17,8 @@ module.exports = {
         
         Bot.on('join', channel => {
             invoke_callback(this, message_received_callback, `${this.name} > Join: ${channel}`, services);
+
+            Bot.say('Bot started!', channel);
         })
         
         Bot.on('error', err => {

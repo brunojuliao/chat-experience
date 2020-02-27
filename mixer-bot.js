@@ -100,15 +100,18 @@ module.exports = {
                 //    console.log(`Ponged ${data.user_name}`);
                 //    return;
                 //}
-                // The code below was commented after talking to Tango, who pointed this was mising on Twitch and that Twitch's behavior was better for testing :)
-                //if (data.user_name == userInfo.username)
-                //    return;
+                
+                const message = data.message.message.map(m => m.text).join('');
+                if (data.user_name == userInfo.username && message == last_message_sent)
+                    return;
 
-                invoke_callback(this, message_received_callback, `${this.name} > ${data.user_name}: ${data.message.message.map(m => m.text).join('')}`, services);
+                invoke_callback(this, message_received_callback, `${this.name} > ${data.user_name}: ${message}`, services);
             });
 
+            let last_message_sent = '';
             this.send_message = function (message) {
                 socket.call('msg', [message]);
+                last_message_sent = message;
                 console.log(`${this.name} > Message sent!`);
             }
         });
