@@ -2,6 +2,7 @@ module.exports = {
     name: 'Twitch',
     is_configured: process.env.twitch_token && process.env.twitch_channel && process.env.twitch_bot_username ? true : false,
     is_hub: false,
+    is_running: false,
     instance: null,
     bot: function(message_received_callback, services) {
         this.send_message = () => {};
@@ -19,6 +20,7 @@ module.exports = {
             invoke_callback(this, message_received_callback, `${this.name} > Join: ${channel}`, services);
 
             Bot.say('Bot started!', channel);
+            this.is_running = true;
         })
         
         Bot.on('error', err => {

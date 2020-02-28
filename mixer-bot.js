@@ -2,9 +2,11 @@ module.exports = {
     name: 'Mixer',
     is_configured: process.env.mixer_token ? true : false,
     is_hub: false,
+    is_running: false,
     instance: null,
     bot: function (message_received_callback, services) {
         this.send_message = function () {}
+        const start_message = 'Bot started!';
         // Load in some dependencies
         const Mixer = require('@mixer/client-node');
         const ws = require('ws');
@@ -80,14 +82,19 @@ module.exports = {
             */
             const socket = await joinChat(userInfo.id, userInfo.channel.id);
 
-            //Send a message once connected to chat.
-            socket.call('msg', [`Bot started!`]);
             // Add more socket stuff here:
 
+            let already_greeted_myself = false;
             // Greet a joined user
             socket.on('UserJoin', data => {
                 //socket.call('msg', [`Hi ${data.username}! I'm pingbot! Write !ping and I will pong back!`]);
                 invoke_callback(this, message_received_callback, `${this.name} > Join: ${data.username}`, services);
+
+                if (!already_greeted_myself && data.username == userInfo.username) {
+                    already_greeted_myself = true;
+                    socket.call('msg', [start_message]);
+                    this.is_running = true;
+                }
             });
 
             // React to our !ping command
@@ -108,7 +115,7 @@ module.exports = {
                 invoke_callback(this, message_received_callback, `${this.name} > ${data.user_name}: ${message}`, services);
             });
 
-            let last_message_sent = '';
+            let last_message_sent = start_message;
             this.send_message = function (message) {
                 socket.call('msg', [message]);
                 last_message_sent = message;

@@ -3,7 +3,7 @@ module.exports = {
   is_configured: process.env.telegram_token && process.env.telegram_username ? true : false,
   is_hub: true,
   instance: null,
-  bot: function (message_received_callback, services) {
+  bot: function (message_received_callback, services, hub_start_callback, hub_stop_callback) {
     const allowed_username = process.env.telegram_username;
     const TelegramBot = require('node-telegram-bot-api');
 
@@ -35,7 +35,21 @@ module.exports = {
       }
       chatId = msg.chat.id;
       console.log(`Chat ID ${chatId} recorded. Starting to listen`);
-	    client.sendMessage(msg.chat.id, "START: Started listening.");
+
+      client.sendMessage(msg.chat.id, 'START: Started listening.');
+      
+      //This callback will trigger the bots instantiation (start)
+      if (hub_start_callback) hub_start_callback(this, services);
+      
+      let check_count = 0;
+      const check_services = () => {
+        check_count++;
+        if (check_count > 10 || services.filter(s => s.is_configured && s.is_running).length == services.length) {
+          clearInterval(interval);
+          client.sendMessage(msg.chat.id, `${services.map(s => `${s.name}: ${s.is_configured ? "configured" : "NOT configured"}, ${s.is_running ? "running" : "NOT running (check config data and/or logs)"}`).join('\n')}`);
+        }
+      }
+      let interval = setInterval(check_services, 500);
     });
 
     client.onText(/\/stop$/, (msg, match) => {
@@ -45,7 +59,10 @@ module.exports = {
       }
       chatId = undefined;
       console.log(`Stop listenning`);
-	    client.sendMessage(msg.chat.id, "STOP: Stopped listening.");
+      client.sendMessage(msg.chat.id, "STOP: Stopped listening.");
+      
+      if (hub_stop_callback)
+        hub_stop_callback(this, services);
     });
 
     // Listen for any kind of message. There are different kinds of
