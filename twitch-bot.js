@@ -6,6 +6,7 @@ module.exports = {
     instance: null,
     bot: function(message_received_callback, services) {
         this.send_message = () => {};
+        this.close = () => {};
         const twitch_channel = process.env.twitch_channel;
 
         const TwitchBot = require('twitch-bot')
@@ -35,6 +36,8 @@ module.exports = {
 			Bot.say(message, twitch_channel);
             console.log(`${this.name} > Message sent!`);
         }
+
+        this.close = () => Bot.close();
 
         const invoke_callback = (service, message_received_callback, message, services) => {
             if (message_received_callback)

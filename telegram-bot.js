@@ -29,14 +29,14 @@ module.exports = {
 
     let chatId;
     client.onText(/\/start$/, (msg, match) => {
+      chatId = msg.chat.id;
       if (msg.chat.username != allowed_username) {
-        client.sendMessage(msg.chat.id, "START: Not an allowed user.");
+        client.sendMessage(chatId, "START: Not an allowed user.");
         return;
       }
-      chatId = msg.chat.id;
-      console.log(`Chat ID ${chatId} recorded. Starting to listen`);
+      console.log(`Start listenning`);
 
-      client.sendMessage(msg.chat.id, 'START: Started listening.');
+      client.sendMessage(chatId, 'START: Started listening.');
       
       //This callback will trigger the bots instantiation (start)
       if (hub_start_callback) hub_start_callback(this, services);
@@ -46,7 +46,7 @@ module.exports = {
         check_count++;
         if (check_count > 10 || services.filter(s => s.is_configured && s.is_running).length == services.length) {
           clearInterval(interval);
-          client.sendMessage(msg.chat.id, `${services.map(s => `${s.name}: ${s.is_configured ? "configured" : "NOT configured"}, ${s.is_running ? "running" : "NOT running (check config data and/or logs)"}`).join('\n')}`);
+          client.sendMessage(chatId, `${services.map(s => `${s.name}: ${s.is_configured ? "configured" : "NOT configured"}, ${s.is_running ? "running" : "NOT running (check config data and/or logs)"}`).join('\n')}`);
         }
       }
       let interval = setInterval(check_services, 500);

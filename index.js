@@ -11,7 +11,11 @@ const services = [
 const regular_message_handler = (service, message, services) => {
     console.log(`${service.name}: Message received!`);
     services.forEach(s => {
-        if (s) s.send_message(message);
+        try {
+            if (s) s.send_message(message);
+        } catch (e) {
+            console.log(e);
+        }
     });
 };
 
@@ -29,28 +33,41 @@ const is_specific_service_reply = (message, services, data) => {
 
 const hub_message_handler = (service, message, services, target_service_name) => {
     console.log(`${service.name}: Message received!`);
-    
+
     if (is_specific_service_reply(message, services, target_service_name))
         return;
 
     services.forEach(s => {
-        if (s.is_running) s.instance.send_message(message);
+        try {
+            if (s.is_running) s.instance.send_message(message);
+        } catch (e) {
+            console.log(e);
+        }
     });
 };
 
 const hub_start_handler = (hub, services) => {
     services.forEach(s => {
-        if (!s.is_configured || s.is_running) return;
-        s.instance = bot_factory(s);
+        try {
+            if (!s.is_configured || s.is_running) return;
+            s.instance = bot_factory(s);
+        } catch (e) {
+            console.log(e);
+        }
     });
 };
 
 const hub_stop_handler = (hub, services) => {
     services.forEach(s => {
-        if (!s.is_running) return;
-        s.instance.send_message('Bot stopped!');
-        s.instance = null;
-        s.is_running = false;
+        try {
+            if (!s.is_running) return;
+            s.instance.send_message('Bot stopped!');
+            s.instance.close();
+            s.instance = null;
+            s.is_running = false;
+        } catch (e) {
+            console.log(e);
+        }
     });
 };
 
@@ -69,8 +86,12 @@ const bot_factory = (service) => {
 }
 
 services.forEach(s => {
-    if (!s.is_hub) return;
-    s.instance = bot_factory(s);
+    try {
+        if (!s.is_hub) return;
+        s.instance = bot_factory(s);
+    } catch (e) {
+        console.log(e);
+    }
 });
 
 // This is for debugging only.

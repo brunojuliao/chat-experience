@@ -5,7 +5,8 @@ module.exports = {
     is_running: false,
     instance: null,
     bot: function (message_received_callback, services) {
-        this.send_message = function () {}
+        this.send_message = (message) => {};
+        this.close = () => {};
         const start_message = 'Bot started!';
         // Load in some dependencies
         const Mixer = require('@mixer/client-node');
@@ -121,6 +122,8 @@ module.exports = {
                 last_message_sent = message;
                 console.log(`${this.name} > Message sent!`);
             }
+
+            this.close = () => socket.close();
         });
 
         const invoke_callback = (service, message_received_callback, message, services) => {
