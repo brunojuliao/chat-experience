@@ -45,7 +45,7 @@ Not done yet... :)
 
 We need few environment variables. If you know what I mean, their names are: mixer_token, telegram_token, telegram_username, twitch_bot_username, twitch_token, twitch_channel.
 
-If you have no idea, no problem. Most likely you are a Windows User, so I will describe how to set it on Windows (let me know if need others):
+If you have no idea, no problem. Most likely you are a Windows User, so I will describe how to set it on Windows (let me know if need others. Also, if you want something simpler, skip to the next block):
 
 - Open cmd.exe
   - Run: setx mixer_token [telegram token]
@@ -67,6 +67,17 @@ __Why the set commands seems duplicated?__
 
 _The "set" command will set the env var for the current session only. The "setx" command will set the env var system wide. You can run only setx though. The "set" suggestions is in the case of you using that same session to run the program._
 
+If it's still complicated, you can:
+- open the chex-sample.bat
+- replace the values for the services you plan to use (remember that Telegram is mandatory. Mixer and Twitch are optional)
+- save it as chex.bat (this name is in .gitignore, so don't worry about pushing credentials to github accidentally)
+- Download the compiled version [here](http://tiny.cc/d24bkz) (right-click and ask to open in new tab)
+- Extract the executable from the zip
+- Make sure you have chex.bat and the executable in the same folder
+- Double click chex.bat
+- Done!
+Thanks to @gvasconcelos for that!
+
 __Cool. Although, I'm not a programmer. How can I run it?__
 
 _In this case you can download a compiled version [here](http://tiny.cc/d24bkz) (right-click and ask to open in new tab). You can't scape the cmd.exe steps though. Those are important._
@@ -74,3 +85,15 @@ _In this case you can download a compiled version [here](http://tiny.cc/d24bkz) 
 __Will anyone in Telegram be able to use "my bot"? I mean, read my channel's chat history and also send messages?__
 
 _No. It was built to answer commands only from the configured "telegram_username". Everyone else will be able to find your bot and send messages to it, but they will get as reply "Private bot"._
+
+__Is it possible to run it in a server or service like Heroku, Azure or AWS?__
+
+_Yes. Althoug, the environment variables are still required. Heroku has a catch regarding having to scale down web and scale up work. I plan to make a detailed guide in the future. I already have one of my friends using it in Heroku and works fine._
+
+__Can you set it up for me?__
+
+_Yes. Although, I need to charge a setup fee._
+
+__It sounds like an interesting project, although I might need some changes. Can you do it?__
+
+_I suggest you message me (brunojuliao.net@gmail.com)._
