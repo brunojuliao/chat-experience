@@ -1,11 +1,13 @@
 const telegram = require("./telegram-bot.js");
 const mixer = require("./mixer-bot.js");
 const twitch = require("./twitch-bot.js");
+const youtube = require("./youtube-bot.js");
 
 const services = [
     telegram,
     mixer,
     twitch,
+    youtube,
 ];
 
 const regular_message_handler = (service, message, services) => {
@@ -72,9 +74,11 @@ const hub_stop_handler = (hub, services) => {
 };
 
 let service_mapping = {};
-service_mapping[telegram.name] = [mixer, twitch];
+service_mapping[telegram.name] = [mixer, twitch, youtube];
 service_mapping[mixer.name] = [telegram];
 service_mapping[twitch.name] = [telegram];
+service_mapping[youtube.name] = [telegram];
+
 
 const bot_factory = (service) => {
     if (!service.is_configured) return null;
