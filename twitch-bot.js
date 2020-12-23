@@ -7,7 +7,7 @@ module.exports = {
     bot: function(message_received_callback, services) {
         this.send_message = () => {};
         this.close = () => {};
-        const twitch_channel = process.env.twitch_channel;
+        const twitch_channel = [process.env.twitch_channel];
 
         const TwitchBot = require('twitch-bot')
         
