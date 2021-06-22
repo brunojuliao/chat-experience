@@ -12,7 +12,7 @@
     "@mixer/client-node": "^3.5.0",
     "node-telegram-bot-api": "^0.40.0",
     "twitch-bot": "^1.3.5",
-    "ws": "^7.2.1",
+    "ws": "^7.4.6",
     "youtube-live-chat": "^1.0.3"
   },
   "repository": {
